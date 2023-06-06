@@ -1,0 +1,16 @@
+.vertical-carousel {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.vertical-carousel::-webkit-scrollbar { 
+    display: none;
+}
+
+.vertical-carousel > * {
+    scroll-snap-align: start;
+    user-select: none;
+}
