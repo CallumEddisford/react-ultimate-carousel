@@ -46,6 +46,7 @@ var ReactVerticalCarousel = /*#__PURE__*/function (_Component) {
       });
       document.addEventListener("mousemove", _this.handleMouseMove);
       document.addEventListener("mouseup", _this.handleMouseUp);
+      _this.carouselRef.current.style['scroll-snap-type'] = 'none';
     });
     _defineProperty(_assertThisInitialized(_this), "handleMouseMove", function (e) {
       if (_this.state.isDragging) {
@@ -59,6 +60,7 @@ var ReactVerticalCarousel = /*#__PURE__*/function (_Component) {
       });
       document.removeEventListener("mousemove", _this.handleMouseMove);
       document.removeEventListener("mouseup", _this.handleMouseUp);
+      _this.carouselRef.current.style['scroll-snap-type'] = 'y mandatory';
     });
     _this.state = {
       visibleIndex: 0,

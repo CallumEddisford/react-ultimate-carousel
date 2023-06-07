@@ -31,13 +31,13 @@ class ReactVerticalCarousel extends Component {
     });
     document.addEventListener("mousemove", this.handleMouseMove);
     document.addEventListener("mouseup", this.handleMouseUp);
+    this.carouselRef.current.style['scroll-snap-type'] = 'none';
   };
 
   handleMouseMove = (e) => {
     if (this.state.isDragging) {
       const deltaY = e.clientY - this.state.dragStartPosition;
-      this.carouselRef.current.scrollTop =
-        this.state.dragStartScrollTop - deltaY;
+      this.carouselRef.current.scrollTop = this.state.dragStartScrollTop - deltaY;
     }
   };
 
@@ -47,6 +47,7 @@ class ReactVerticalCarousel extends Component {
     });
     document.removeEventListener("mousemove", this.handleMouseMove);
     document.removeEventListener("mouseup", this.handleMouseUp);
+    this.carouselRef.current.style['scroll-snap-type'] = 'y mandatory';
   };
 
   componentDidMount() {
