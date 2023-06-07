@@ -5,7 +5,7 @@ class ReactUltimateCarousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleIndex: 0,
+      visibleIndex: props.startingIndex || 0,
       isDragging: false,
       dragStartPositionY: 0,
       dragStartPositionX: 0,
@@ -79,28 +79,42 @@ class ReactUltimateCarousel extends Component {
     this.observers.push(observer);
   };
 
-  navigateSlide = (direction) => {
+  navigateSlide = (directionOrIndex) => {
     const { visibleIndex } = this.state;
     const numSlides = React.Children.count(this.props.children);
+    const startingIndex = this.props.startingIndex || 0;
     let newIndex;
-
-    if (direction === "next") {
+  
+    if (typeof directionOrIndex === "number") {
+      newIndex = (directionOrIndex - startingIndex + numSlides) % numSlides;
+    } else if (directionOrIndex === "next") {
       newIndex = (visibleIndex + 1) % numSlides;
-    } else if (direction === "previous") {
+    } else if (directionOrIndex === "previous") {
       newIndex = (visibleIndex - 1 + numSlides) % numSlides;
     }
+  
+    newIndex = (newIndex + startingIndex) % numSlides;
 
     this.carouselRef.current.scrollTo({
       top: 0,
       left: newIndex * this.carouselRef.current.offsetWidth,
-      behavior: "smooth",
+      behavior: typeof directionOrIndex === "number" ? "instant" : "smooth",
     });
-
+  
     this.setState({ visibleIndex: newIndex });
   };
 
   componentDidMount() {
     this.childrenRefs.forEach(this.observeIntersection);
+    const { startingIndex } = this.props;
+    if (startingIndex && startingIndex >= 0 && startingIndex < this.childrenRefs.length) {
+      this.carouselRef.current.scrollTo({
+        top: 0,
+        left: startingIndex * this.carouselRef.current.offsetWidth,
+        behavior: "auto",
+      });
+      this.setState({ visibleIndex: startingIndex });
+    }
   }
 
   componentWillUnmount() {
@@ -122,25 +136,29 @@ class ReactUltimateCarousel extends Component {
       scrollSnapType: isDragging ? "none" : `${this.isVertical ? "y" : "x"} mandatory`,
       whiteSpace: this.isVertical ? "normal" : "nowrap",
     };
-    
 
     return (
-      // <button onClick={() => this.navigateSlide("previous")}>Previous</button>
-      // <button onClick={() => this.navigateSlide("next")}>Next</button>
-      <div
-        style={style}
-        className="carousel"
-        ref={this.carouselRef}
-        onMouseDown={this.handleMouseDown}
-      >
-        {React.Children.map(children, (child, index) =>
-          React.cloneElement(child, {
-            key: index,
-            isActive: index === visibleIndex,
-            innerRef: (ref) => (this.childrenRefs[index] = ref),
-          })
-        )}
-      </div>
+      <>
+        <div
+          style={style}
+          className="carousel"
+          ref={this.carouselRef}
+          onMouseDown={this.handleMouseDown}
+        >
+          {React.Children.map(children, (child, index) =>
+            React.cloneElement(child, {
+              key: index,
+              isActive: index === visibleIndex,
+              innerRef: (ref) => (this.childrenRefs[index] = ref),
+            })
+          )}
+        </div>
+        {this.props.renderControls &&
+          this.props.renderControls({
+            navigateSlide: this.navigateSlide,
+            visibleIndex: this.state.visibleIndex,
+          })}
+      </>
     );
   }
 }

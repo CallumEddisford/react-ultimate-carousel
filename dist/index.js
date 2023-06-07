@@ -90,26 +90,30 @@ var ReactUltimateCarousel = /*#__PURE__*/function (_Component) {
       observer.observe(childRef);
       _this.observers.push(observer);
     });
-    _defineProperty(_assertThisInitialized(_this), "navigateSlide", function (direction) {
+    _defineProperty(_assertThisInitialized(_this), "navigateSlide", function (directionOrIndex) {
       var visibleIndex = _this.state.visibleIndex;
       var numSlides = _react["default"].Children.count(_this.props.children);
+      var startingIndex = _this.props.startingIndex || 0;
       var newIndex;
-      if (direction === "next") {
+      if (typeof directionOrIndex === "number") {
+        newIndex = (directionOrIndex - startingIndex + numSlides) % numSlides;
+      } else if (directionOrIndex === "next") {
         newIndex = (visibleIndex + 1) % numSlides;
-      } else if (direction === "previous") {
+      } else if (directionOrIndex === "previous") {
         newIndex = (visibleIndex - 1 + numSlides) % numSlides;
       }
+      newIndex = (newIndex + startingIndex) % numSlides;
       _this.carouselRef.current.scrollTo({
         top: 0,
         left: newIndex * _this.carouselRef.current.offsetWidth,
-        behavior: "smooth"
+        behavior: typeof directionOrIndex === "number" ? "instant" : "smooth"
       });
       _this.setState({
         visibleIndex: newIndex
       });
     });
     _this.state = {
-      visibleIndex: 0,
+      visibleIndex: props.startingIndex || 0,
       isDragging: false,
       dragStartPositionY: 0,
       dragStartPositionX: 0,
@@ -126,6 +130,17 @@ var ReactUltimateCarousel = /*#__PURE__*/function (_Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.childrenRefs.forEach(this.observeIntersection);
+      var startingIndex = this.props.startingIndex;
+      if (startingIndex && startingIndex >= 0 && startingIndex < this.childrenRefs.length) {
+        this.carouselRef.current.scrollTo({
+          top: 0,
+          left: startingIndex * this.carouselRef.current.offsetWidth,
+          behavior: "auto"
+        });
+        this.setState({
+          visibleIndex: startingIndex
+        });
+      }
     }
   }, {
     key: "componentWillUnmount",
@@ -154,25 +169,23 @@ var ReactUltimateCarousel = /*#__PURE__*/function (_Component) {
         scrollSnapType: isDragging ? "none" : "".concat(this.isVertical ? "y" : "x", " mandatory"),
         whiteSpace: this.isVertical ? "normal" : "nowrap"
       };
-      return (
-        /*#__PURE__*/
-        // <button onClick={() => this.navigateSlide("previous")}>Previous</button>
-        // <button onClick={() => this.navigateSlide("next")}>Next</button>
-        _react["default"].createElement("div", {
-          style: style,
-          className: "carousel",
-          ref: this.carouselRef,
-          onMouseDown: this.handleMouseDown
-        }, _react["default"].Children.map(children, function (child, index) {
-          return /*#__PURE__*/_react["default"].cloneElement(child, {
-            key: index,
-            isActive: index === visibleIndex,
-            innerRef: function innerRef(ref) {
-              return _this2.childrenRefs[index] = ref;
-            }
-          });
-        }))
-      );
+      return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("div", {
+        style: style,
+        className: "carousel",
+        ref: this.carouselRef,
+        onMouseDown: this.handleMouseDown
+      }, _react["default"].Children.map(children, function (child, index) {
+        return /*#__PURE__*/_react["default"].cloneElement(child, {
+          key: index,
+          isActive: index === visibleIndex,
+          innerRef: function innerRef(ref) {
+            return _this2.childrenRefs[index] = ref;
+          }
+        });
+      })), this.props.renderControls && this.props.renderControls({
+        navigateSlide: this.navigateSlide,
+        visibleIndex: this.state.visibleIndex
+      }));
     }
   }]);
   return ReactUltimateCarousel;
