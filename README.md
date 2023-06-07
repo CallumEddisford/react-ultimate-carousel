@@ -25,7 +25,7 @@ Ultimate slider gives you the tools to create all the features you want and need
   - Autoplay
   - Infinite scroll
   - TikTok style
-- Light weight with a tiny package size of `~6kb`
+- Light weight with a tiny package size of `~7kb`
 
 # Installation
 

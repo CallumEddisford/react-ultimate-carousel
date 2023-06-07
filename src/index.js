@@ -7,10 +7,6 @@ class ReactUltimateCarousel extends Component {
     this.state = {
       visibleIndex: props.startingIndex || 0,
       isDragging: false,
-      dragStartPositionY: 0,
-      dragStartPositionX: 0,
-      dragStartScrollTop: 0,
-      dragStartScrollLeft: 0,
     };
     this.carouselRef = React.createRef();
     this.childrenRefs = [];
@@ -31,10 +27,12 @@ class ReactUltimateCarousel extends Component {
     const { scrollTop, scrollLeft } = this.carouselRef.current;
     this.setState({
       isDragging: true,
-      dragStartPositionY: clientY,
-      dragStartPositionX: clientX,
-      dragStartScrollTop: scrollTop,
-      dragStartScrollLeft: scrollLeft,
+      dragStartPosition: {
+        clientY,
+        clientX,
+        scrollTop,
+        scrollLeft,
+      },
     });
     document.addEventListener("mousemove", this.handleMouseMove);
     document.addEventListener("mouseup", this.handleMouseUp);
@@ -43,19 +41,14 @@ class ReactUltimateCarousel extends Component {
   handleMouseMove = (e) => {
     if (this.state.isDragging) {
       const { clientY, clientX } = e;
-      const {
-        dragStartPositionY,
-        dragStartPositionX,
-        dragStartScrollTop,
-        dragStartScrollLeft,
-      } = this.state;
-      const deltaY = clientY - dragStartPositionY;
-      const deltaX = clientX - dragStartPositionX;
+      const { clientY: startY, clientX: startX, scrollTop, scrollLeft } = this.state.dragStartPosition;
+      const deltaY = clientY - startY;
+      const deltaX = clientX - startX;
 
       if (this.isVertical) {
-        this.carouselRef.current.scrollTop = dragStartScrollTop - deltaY;
+        this.carouselRef.current.scrollTop = scrollTop - deltaY;
       } else {
-        this.carouselRef.current.scrollLeft = dragStartScrollLeft - deltaX;
+        this.carouselRef.current.scrollLeft = scrollLeft - deltaX;
       }
     }
   };
@@ -67,14 +60,11 @@ class ReactUltimateCarousel extends Component {
   };
 
   observeIntersection = (childRef, index) => {
-    const observer = new IntersectionObserver(
-      (entries) => this.handleIntersection(entries, index),
-      {
-        root: null,
-        rootMargin: "0px",
-        threshold: this.props.threshold || 0.5,
-      }
-    );
+    const observer = new IntersectionObserver((entries) => this.handleIntersection(entries, index), {
+      root: null,
+      rootMargin: "0px",
+      threshold: this.props.threshold || 0.5,
+    });
     observer.observe(childRef);
     this.observers.push(observer);
   };
@@ -84,7 +74,7 @@ class ReactUltimateCarousel extends Component {
     const numSlides = React.Children.count(this.props.children);
     const startingIndex = this.props.startingIndex || 0;
     let newIndex;
-  
+
     if (typeof directionOrIndex === "number") {
       newIndex = (directionOrIndex - startingIndex + numSlides) % numSlides;
     } else if (directionOrIndex === "next") {
@@ -92,7 +82,7 @@ class ReactUltimateCarousel extends Component {
     } else if (directionOrIndex === "previous") {
       newIndex = (visibleIndex - 1 + numSlides) % numSlides;
     }
-  
+
     newIndex = (newIndex + startingIndex) % numSlides;
 
     this.carouselRef.current.scrollTo({
@@ -100,7 +90,7 @@ class ReactUltimateCarousel extends Component {
       left: newIndex * this.carouselRef.current.offsetWidth,
       behavior: typeof directionOrIndex === "number" ? "instant" : "smooth",
     });
-  
+
     this.setState({ visibleIndex: newIndex });
   };
 

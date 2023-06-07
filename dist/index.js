@@ -46,10 +46,12 @@ var ReactUltimateCarousel = /*#__PURE__*/function (_Component) {
         scrollLeft = _this$carouselRef$cur.scrollLeft;
       _this.setState({
         isDragging: true,
-        dragStartPositionY: clientY,
-        dragStartPositionX: clientX,
-        dragStartScrollTop: scrollTop,
-        dragStartScrollLeft: scrollLeft
+        dragStartPosition: {
+          clientY: clientY,
+          clientX: clientX,
+          scrollTop: scrollTop,
+          scrollLeft: scrollLeft
+        }
       });
       document.addEventListener("mousemove", _this.handleMouseMove);
       document.addEventListener("mouseup", _this.handleMouseUp);
@@ -58,17 +60,17 @@ var ReactUltimateCarousel = /*#__PURE__*/function (_Component) {
       if (_this.state.isDragging) {
         var clientY = e.clientY,
           clientX = e.clientX;
-        var _this$state = _this.state,
-          dragStartPositionY = _this$state.dragStartPositionY,
-          dragStartPositionX = _this$state.dragStartPositionX,
-          dragStartScrollTop = _this$state.dragStartScrollTop,
-          dragStartScrollLeft = _this$state.dragStartScrollLeft;
-        var deltaY = clientY - dragStartPositionY;
-        var deltaX = clientX - dragStartPositionX;
+        var _this$state$dragStart = _this.state.dragStartPosition,
+          startY = _this$state$dragStart.clientY,
+          startX = _this$state$dragStart.clientX,
+          scrollTop = _this$state$dragStart.scrollTop,
+          scrollLeft = _this$state$dragStart.scrollLeft;
+        var deltaY = clientY - startY;
+        var deltaX = clientX - startX;
         if (_this.isVertical) {
-          _this.carouselRef.current.scrollTop = dragStartScrollTop - deltaY;
+          _this.carouselRef.current.scrollTop = scrollTop - deltaY;
         } else {
-          _this.carouselRef.current.scrollLeft = dragStartScrollLeft - deltaX;
+          _this.carouselRef.current.scrollLeft = scrollLeft - deltaX;
         }
       }
     });
@@ -114,11 +116,7 @@ var ReactUltimateCarousel = /*#__PURE__*/function (_Component) {
     });
     _this.state = {
       visibleIndex: props.startingIndex || 0,
-      isDragging: false,
-      dragStartPositionY: 0,
-      dragStartPositionX: 0,
-      dragStartScrollTop: 0,
-      dragStartScrollLeft: 0
+      isDragging: false
     };
     _this.carouselRef = /*#__PURE__*/_react["default"].createRef();
     _this.childrenRefs = [];
@@ -162,9 +160,9 @@ var ReactUltimateCarousel = /*#__PURE__*/function (_Component) {
     value: function render() {
       var _this2 = this;
       var children = this.props.children;
-      var _this$state2 = this.state,
-        visibleIndex = _this$state2.visibleIndex,
-        isDragging = _this$state2.isDragging;
+      var _this$state = this.state,
+        visibleIndex = _this$state.visibleIndex,
+        isDragging = _this$state.isDragging;
       var style = {
         scrollSnapType: isDragging ? "none" : "".concat(this.isVertical ? "y" : "x", " mandatory"),
         whiteSpace: this.isVertical ? "normal" : "nowrap"
