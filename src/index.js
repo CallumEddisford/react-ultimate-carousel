@@ -1,18 +1,21 @@
 import React, { Component } from "react";
 import "intersection-observer";
 
-class ReactVerticalCarousel extends Component {
+class ReactUltimateCarousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
       visibleIndex: 0,
       isDragging: false,
-      dragStartPosition: 0,
+      dragStartPositionY: 0,
+      dragStartPositionX: 0,
       dragStartScrollTop: 0,
+      dragStartScrollLeft: 0,
     };
     this.carouselRef = React.createRef();
     this.childrenRefs = [];
     this.observers = [];
+    this.isVertical = this.props.axis === "vertical";
   }
 
   handleIntersection = (entries, index) => {
@@ -24,60 +27,109 @@ class ReactVerticalCarousel extends Component {
   };
 
   handleMouseDown = (e) => {
+    const { clientY, clientX } = e;
+    const { scrollTop, scrollLeft } = this.carouselRef.current;
     this.setState({
       isDragging: true,
-      dragStartPosition: e.clientY,
-      dragStartScrollTop: this.carouselRef.current.scrollTop,
+      dragStartPositionY: clientY,
+      dragStartPositionX: clientX,
+      dragStartScrollTop: scrollTop,
+      dragStartScrollLeft: scrollLeft,
     });
     document.addEventListener("mousemove", this.handleMouseMove);
     document.addEventListener("mouseup", this.handleMouseUp);
-    this.carouselRef.current.style['scroll-snap-type'] = 'none';
   };
 
   handleMouseMove = (e) => {
     if (this.state.isDragging) {
-      const deltaY = e.clientY - this.state.dragStartPosition;
-      this.carouselRef.current.scrollTop = this.state.dragStartScrollTop - deltaY;
+      const { clientY, clientX } = e;
+      const {
+        dragStartPositionY,
+        dragStartPositionX,
+        dragStartScrollTop,
+        dragStartScrollLeft,
+      } = this.state;
+      const deltaY = clientY - dragStartPositionY;
+      const deltaX = clientX - dragStartPositionX;
+
+      if (this.isVertical) {
+        this.carouselRef.current.scrollTop = dragStartScrollTop - deltaY;
+      } else {
+        this.carouselRef.current.scrollLeft = dragStartScrollLeft - deltaX;
+      }
     }
   };
 
   handleMouseUp = () => {
-    this.setState({
-      isDragging: false,
-    });
+    this.setState({ isDragging: false });
     document.removeEventListener("mousemove", this.handleMouseMove);
     document.removeEventListener("mouseup", this.handleMouseUp);
-    this.carouselRef.current.style['scroll-snap-type'] = 'y mandatory';
+  };
+
+  observeIntersection = (childRef, index) => {
+    const observer = new IntersectionObserver(
+      (entries) => this.handleIntersection(entries, index),
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: this.props.threshold || 0.5,
+      }
+    );
+    observer.observe(childRef);
+    this.observers.push(observer);
+  };
+
+  navigateSlide = (direction) => {
+    const { visibleIndex } = this.state;
+    const numSlides = React.Children.count(this.props.children);
+    let newIndex;
+
+    if (direction === "next") {
+      newIndex = (visibleIndex + 1) % numSlides;
+    } else if (direction === "previous") {
+      newIndex = (visibleIndex - 1 + numSlides) % numSlides;
+    }
+
+    this.carouselRef.current.scrollTo({
+      top: 0,
+      left: newIndex * this.carouselRef.current.offsetWidth,
+      behavior: "smooth",
+    });
+
+    this.setState({ visibleIndex: newIndex });
   };
 
   componentDidMount() {
-    this.childrenRefs.forEach((childRef, index) => {
-      const observer = new IntersectionObserver(
-        (entries) => this.handleIntersection(entries, index),
-        {
-          root: null,
-          rootMargin: "0px",
-          threshold: this.props.threshold || "0.5",
-        }
-      );
-      observer.observe(childRef);
-      this.observers.push(observer);
-    });
+    this.childrenRefs.forEach(this.observeIntersection);
   }
 
   componentWillUnmount() {
-    this.observers.forEach((observer) => {
-      observer.disconnect();
-    });
+    this.observers.forEach((observer) => observer.disconnect());
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { visibleIndex } = this.state;
+    if (visibleIndex !== prevState.visibleIndex && this.props.onChange) {
+      this.props.onChange(visibleIndex);
+    }
   }
 
   render() {
     const { children } = this.props;
-    const { visibleIndex } = this.state;
+    const { visibleIndex, isDragging } = this.state;
+
+    const style = {
+      scrollSnapType: isDragging ? "none" : `${this.isVertical ? "y" : "x"} mandatory`,
+      whiteSpace: this.isVertical ? "normal" : "nowrap",
+    };
+    
 
     return (
+      // <button onClick={() => this.navigateSlide("previous")}>Previous</button>
+      // <button onClick={() => this.navigateSlide("next")}>Next</button>
       <div
-        className="vertical-carousel"
+        style={style}
+        className="carousel"
         ref={this.carouselRef}
         onMouseDown={this.handleMouseDown}
       >
@@ -93,4 +145,4 @@ class ReactVerticalCarousel extends Component {
   }
 }
 
-export default ReactVerticalCarousel;
+export default ReactUltimateCarousel;

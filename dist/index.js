@@ -22,12 +22,12 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var ReactVerticalCarousel = /*#__PURE__*/function (_Component) {
-  _inherits(ReactVerticalCarousel, _Component);
-  var _super = _createSuper(ReactVerticalCarousel);
-  function ReactVerticalCarousel(props) {
+var ReactUltimateCarousel = /*#__PURE__*/function (_Component) {
+  _inherits(ReactUltimateCarousel, _Component);
+  var _super = _createSuper(ReactUltimateCarousel);
+  function ReactUltimateCarousel(props) {
     var _this;
-    _classCallCheck(this, ReactVerticalCarousel);
+    _classCallCheck(this, ReactUltimateCarousel);
     _this = _super.call(this, props);
     _defineProperty(_assertThisInitialized(_this), "handleIntersection", function (entries, index) {
       entries.forEach(function (entry) {
@@ -39,19 +39,37 @@ var ReactVerticalCarousel = /*#__PURE__*/function (_Component) {
       });
     });
     _defineProperty(_assertThisInitialized(_this), "handleMouseDown", function (e) {
+      var clientY = e.clientY,
+        clientX = e.clientX;
+      var _this$carouselRef$cur = _this.carouselRef.current,
+        scrollTop = _this$carouselRef$cur.scrollTop,
+        scrollLeft = _this$carouselRef$cur.scrollLeft;
       _this.setState({
         isDragging: true,
-        dragStartPosition: e.clientY,
-        dragStartScrollTop: _this.carouselRef.current.scrollTop
+        dragStartPositionY: clientY,
+        dragStartPositionX: clientX,
+        dragStartScrollTop: scrollTop,
+        dragStartScrollLeft: scrollLeft
       });
       document.addEventListener("mousemove", _this.handleMouseMove);
       document.addEventListener("mouseup", _this.handleMouseUp);
-      _this.carouselRef.current.style['scroll-snap-type'] = 'none';
     });
     _defineProperty(_assertThisInitialized(_this), "handleMouseMove", function (e) {
       if (_this.state.isDragging) {
-        var deltaY = e.clientY - _this.state.dragStartPosition;
-        _this.carouselRef.current.scrollTop = _this.state.dragStartScrollTop - deltaY;
+        var clientY = e.clientY,
+          clientX = e.clientX;
+        var _this$state = _this.state,
+          dragStartPositionY = _this$state.dragStartPositionY,
+          dragStartPositionX = _this$state.dragStartPositionX,
+          dragStartScrollTop = _this$state.dragStartScrollTop,
+          dragStartScrollLeft = _this$state.dragStartScrollLeft;
+        var deltaY = clientY - dragStartPositionY;
+        var deltaX = clientX - dragStartPositionX;
+        if (_this.isVertical) {
+          _this.carouselRef.current.scrollTop = dragStartScrollTop - deltaY;
+        } else {
+          _this.carouselRef.current.scrollLeft = dragStartScrollLeft - deltaX;
+        }
       }
     });
     _defineProperty(_assertThisInitialized(_this), "handleMouseUp", function () {
@@ -60,64 +78,104 @@ var ReactVerticalCarousel = /*#__PURE__*/function (_Component) {
       });
       document.removeEventListener("mousemove", _this.handleMouseMove);
       document.removeEventListener("mouseup", _this.handleMouseUp);
-      _this.carouselRef.current.style['scroll-snap-type'] = 'y mandatory';
+    });
+    _defineProperty(_assertThisInitialized(_this), "observeIntersection", function (childRef, index) {
+      var observer = new IntersectionObserver(function (entries) {
+        return _this.handleIntersection(entries, index);
+      }, {
+        root: null,
+        rootMargin: "0px",
+        threshold: _this.props.threshold || 0.5
+      });
+      observer.observe(childRef);
+      _this.observers.push(observer);
+    });
+    _defineProperty(_assertThisInitialized(_this), "navigateSlide", function (direction) {
+      var visibleIndex = _this.state.visibleIndex;
+      var numSlides = _react["default"].Children.count(_this.props.children);
+      var newIndex;
+      if (direction === "next") {
+        newIndex = (visibleIndex + 1) % numSlides;
+      } else if (direction === "previous") {
+        newIndex = (visibleIndex - 1 + numSlides) % numSlides;
+      }
+      _this.carouselRef.current.scrollTo({
+        top: 0,
+        left: newIndex * _this.carouselRef.current.offsetWidth,
+        behavior: "smooth"
+      });
+      _this.setState({
+        visibleIndex: newIndex
+      });
     });
     _this.state = {
       visibleIndex: 0,
       isDragging: false,
-      dragStartPosition: 0,
-      dragStartScrollTop: 0
+      dragStartPositionY: 0,
+      dragStartPositionX: 0,
+      dragStartScrollTop: 0,
+      dragStartScrollLeft: 0
     };
     _this.carouselRef = /*#__PURE__*/_react["default"].createRef();
     _this.childrenRefs = [];
     _this.observers = [];
+    _this.isVertical = _this.props.axis === "vertical";
     return _this;
   }
-  _createClass(ReactVerticalCarousel, [{
+  _createClass(ReactUltimateCarousel, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-      this.childrenRefs.forEach(function (childRef, index) {
-        var observer = new IntersectionObserver(function (entries) {
-          return _this2.handleIntersection(entries, index);
-        }, {
-          root: null,
-          rootMargin: "0px",
-          threshold: _this2.props.threshold || "0.5"
-        });
-        observer.observe(childRef);
-        _this2.observers.push(observer);
-      });
+      this.childrenRefs.forEach(this.observeIntersection);
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       this.observers.forEach(function (observer) {
-        observer.disconnect();
+        return observer.disconnect();
       });
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState) {
+      var visibleIndex = this.state.visibleIndex;
+      if (visibleIndex !== prevState.visibleIndex && this.props.onChange) {
+        this.props.onChange(visibleIndex);
+      }
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
       var children = this.props.children;
-      var visibleIndex = this.state.visibleIndex;
-      return /*#__PURE__*/_react["default"].createElement("div", {
-        className: "vertical-carousel",
-        ref: this.carouselRef,
-        onMouseDown: this.handleMouseDown
-      }, _react["default"].Children.map(children, function (child, index) {
-        return /*#__PURE__*/_react["default"].cloneElement(child, {
-          key: index,
-          isActive: index === visibleIndex,
-          innerRef: function innerRef(ref) {
-            return _this3.childrenRefs[index] = ref;
-          }
-        });
-      }));
+      var _this$state2 = this.state,
+        visibleIndex = _this$state2.visibleIndex,
+        isDragging = _this$state2.isDragging;
+      var style = {
+        scrollSnapType: isDragging ? "none" : "".concat(this.isVertical ? "y" : "x", " mandatory"),
+        whiteSpace: this.isVertical ? "normal" : "nowrap"
+      };
+      return (
+        /*#__PURE__*/
+        // <button onClick={() => this.navigateSlide("previous")}>Previous</button>
+        // <button onClick={() => this.navigateSlide("next")}>Next</button>
+        _react["default"].createElement("div", {
+          style: style,
+          className: "carousel",
+          ref: this.carouselRef,
+          onMouseDown: this.handleMouseDown
+        }, _react["default"].Children.map(children, function (child, index) {
+          return /*#__PURE__*/_react["default"].cloneElement(child, {
+            key: index,
+            isActive: index === visibleIndex,
+            innerRef: function innerRef(ref) {
+              return _this2.childrenRefs[index] = ref;
+            }
+          });
+        }))
+      );
     }
   }]);
-  return ReactVerticalCarousel;
+  return ReactUltimateCarousel;
 }(_react.Component);
-var _default = ReactVerticalCarousel;
+var _default = ReactUltimateCarousel;
 exports["default"] = _default;
