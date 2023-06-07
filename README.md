@@ -24,6 +24,7 @@ Ultimate slider gives you the tools to create all the features you want and need
   - With keyboard controls
   - Autoplay
   - Infinite scroll
+  - TikTok style
 - Light weight with a tiny package size of `~6kb`
 
 # Installation
@@ -95,6 +96,18 @@ export default App;
 | innerRef | `function` | The ref that needs to be assigned to your slide element |
 
 You can also use your own props alongside these props
+
+# Examples
+
+Please check out the examples directory, there are serveral examples of how to achieve common carousel requirements.
+
+The examples projects have been created with `create-react-app` so can be simply started by navigating to the example you want and starting the app:
+
+```shell
+  cd examples/horizontal
+  npm install
+  npm run start
+```
 
 # Roadmap:
 
