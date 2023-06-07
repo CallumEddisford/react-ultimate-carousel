@@ -28,7 +28,7 @@ Ultimate slider gives you the tools to create all the features you want and need
   - TikTok style
 
 # Installation
-
+______ NOT READY FOR USE ______
 You can install `react-vertical-carousel` using npm or yarn:
 
 ```shell
