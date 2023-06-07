@@ -16,7 +16,8 @@ Ultimate slider gives you the tools to create all the features you want and need
 - Single element markup, the rest is your own
 - No bloated styles, just a few required rules - complete control over how you style your carousel!
 - No JS transition tom foolery, pure native HTML elements
-- Plenty of demo carousels;
+- Light weight with a tiny package size of `~7kb`
+- Plenty of demos;
   - Horizontal
   - Vertical
   - With navigation buttons
@@ -25,7 +26,6 @@ Ultimate slider gives you the tools to create all the features you want and need
   - Autoplay
   - Infinite scroll
   - TikTok style
-- Light weight with a tiny package size of `~7kb`
 
 # Installation
 
