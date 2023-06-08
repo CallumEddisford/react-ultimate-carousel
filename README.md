@@ -117,5 +117,6 @@ The example projects have been created with `create-react-app` so can be simply 
 - Infinite scroll example
 - Publish package
 - Automate releases
-- Deploy examples
+- Convert examples to storybook
+- Deploy storybook examples
 - Accessibility options
