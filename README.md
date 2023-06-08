@@ -101,7 +101,7 @@ You can also use your own props alongside these props
 
 Please check out the examples directory, there are serveral examples of how to achieve common carousel requirements.
 
-The examples projects have been created with `create-react-app` so can be simply started by navigating to the example you want and starting the app:
+The example projects have been created with `create-react-app` so can be simply started by navigating to the example you want and starting the app:
 
 ```shell
   cd examples/horizontal
