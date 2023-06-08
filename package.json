@@ -1,8 +1,9 @@
 {
   "name": "react-ultimate-carousel",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A simple yet robust carousel for React",
   "main": "dist/index.min.js",
+  "files": ["dist/index.min.js"],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "watch 'npm run build' src",
