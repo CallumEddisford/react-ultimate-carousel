@@ -1,6 +1,6 @@
 {
   "name": "react-ultimate-carousel",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A simple yet robust carousel for React",
   "main": "dist/index.min.js",
   "scripts": {
