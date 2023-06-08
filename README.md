@@ -115,8 +115,7 @@ The example projects have been created with `create-react-app` so can be simply 
 - Keyboard controls example
 - Autoplay example
 - Infinite scroll example
-- Publish package
-- Automate releases
+- Build dist in CI
 - Convert examples to storybook
 - Deploy storybook examples
 - Accessibility options
