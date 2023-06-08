@@ -1,7 +1,7 @@
 {
   "name": "react-ultimate-carousel",
   "version": "0.0.5",
-  "description": "A simple yet robust carousel for React",
+  "description": "Introducing Ultimate Carousel, a utility-first carousel for React apps that prioritizes functionality over pre-packaged features.",
   "main": "dist/index.min.js",
   "files": ["dist/index.min.js", "lib"],
   "repository": {

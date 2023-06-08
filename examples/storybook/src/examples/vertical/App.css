@@ -1,0 +1,27 @@
+.carousel--vertical {
+  width: 100vw;
+  height: 500px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.carousel--vertical .slide {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+}
+
+.carousel--vertical .slide:last-child {
+  height: 100%;
+}
+
+.carousel--vertical .slide:nth-child(odd) {
+  background-color: #777;
+}
+
+.carousel--vertical .slide:nth-child(even) {
+  background-color: blue;
+}

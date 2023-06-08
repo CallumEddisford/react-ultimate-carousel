@@ -1,0 +1,23 @@
+.carousel--tiktok {
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  background-color: #181818;
+}
+
+.carousel--tiktok .slide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+}
+
+.carousel--tiktok .slide > video {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  object-fit: cover;
+  object-position: center;
+}
