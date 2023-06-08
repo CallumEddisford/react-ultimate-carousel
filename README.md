@@ -8,7 +8,7 @@ Ultimate Carousel empowers you to build your carousel exactly the way you envisi
 
 While other carousel packages may be convenient for quick implementation, they often include a plethora of features that end up bloating your builds unnecessarily.
 
-Ultimate slider gives you the tools to create all the features you want and need.
+Ultimate Carousel gives you the tools to create all the features you want and need.
 
 # Features
 
@@ -116,4 +116,6 @@ The examples projects have been created with `create-react-app` so can be simply
 - Autoplay example
 - Infinite scroll example
 - Publish package
+- Automate releases
+- Deploy examples
 - Accessibility options
