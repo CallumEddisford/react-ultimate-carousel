@@ -1,0 +1,32 @@
+.carousel--horizontal {
+  width: 100vw;
+  max-width: 900px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+.carousel--horizontal .carousel {
+  display: flex;
+}
+
+.carousel--horizontal .slide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: white;
+  font-size: 2rem;
+}
+
+.carousel--horizontal .slide:last-child {
+  height: 100%;
+}
+
+.carousel--horizontal .slide:nth-child(odd) {
+  background-color: #777;
+}
+.carousel--horizontal .slide:nth-child(even) {
+  background-color: blue;
+}

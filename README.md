@@ -10,6 +10,8 @@ While other carousel packages may be convenient for quick implementation, they o
 
 Ultimate Carousel gives you the tools to create all the features you want and need.
 
+Relies on CSS Scroll Snap: [https://caniuse.com/css-snappoints](https://caniuse.com/css-snappoints)
+
 # Features
 
 - Utility first
