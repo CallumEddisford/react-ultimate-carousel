@@ -29,22 +29,22 @@ DEMOS: [https://react-ultimate-carousel.callumeddisford.co.uk/](https://react-ul
   - Vertical
   - With navigation buttons
   - With indicators/thumbnails
-  - With keyboard controls (TODO)
-  - Autoplay (TODO)
-  - Infinite scroll (TODO)
+  - With keyboard controls
+  - Autoplay
+  - Infinite scroll
   - TikTok style
 
 # Installation
-You can install `react-vertical-carousel` using npm or yarn:
+You can install `react-ultimate-carousel` using npm or yarn:
 
 ```shell
-npm install react-vertical-carousel
+npm install react-ultimate-carousel
 ```
 
 or
 
 ```shell
-yarn add react-vertical-carousel
+yarn add react-ultimate-carousel
 ```
 
 # Usage
@@ -119,4 +119,3 @@ To start storybook locally:
 
 - Testing!!!
 - Convert to TS
-- Minify css
