@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/react-ultimate-carousel.svg)](https://badge.fury.io/js/react-ultimate-carousel)
+![workflow](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/npm-publish.yml/badge.svg)
+
 # Ultimate Carousel
 
 > _"The best kind of web carousel is the one you build yourself!"_
@@ -12,25 +15,26 @@ Ultimate Carousel gives you the tools to create all the features you want and ne
 
 Relies on CSS Scroll Snap: [https://caniuse.com/css-snappoints](https://caniuse.com/css-snappoints)
 
+DEMOS: [https://react-ultimate-carousel.callumeddisford.co.uk/](https://react-ultimate-carousel.callumeddisford.co.uk/)
+
 # Features
 
 - Utility first
 - Single element markup, the rest is your own
 - No bloated styles, just a few required rules - complete control over how you style your carousel!
 - No JS transition tom foolery, pure native HTML elements
-- Light weight with a tiny package size of `~7kb`
+- Light weight with a tiny package size of `~2.5kb` gzipped
 - Plenty of demos;
   - Horizontal
   - Vertical
   - With navigation buttons
   - With indicators/thumbnails
-  - With keyboard controls
-  - Autoplay
-  - Infinite scroll
+  - With keyboard controls (TODO)
+  - Autoplay (TODO)
+  - Infinite scroll (TODO)
   - TikTok style
 
 # Installation
-______ NOT READY FOR USE ______
 You can install `react-vertical-carousel` using npm or yarn:
 
 ```shell
@@ -49,7 +53,7 @@ To get started, first import the component and stylesheet:
 
 ```js
 import ReactUltimateCarousel from "react-ultimate-carousel";
-import "react-ultimate-carousel/lib/styles/carousel.css";
+import "react-ultimate-carousel/lib/styles/carousel.min.css";
 ```
 
 Then simply wrap your slides with the component, its important to note that each slide requires a ref to be set using the `innerRef` propery which is automatically provided by the component.
@@ -101,24 +105,18 @@ You can also use your own props alongside these props
 
 # Examples
 
-Please check out the examples directory, there are serveral examples of how to achieve common carousel requirements.
+Please check out the `storybook/src/examples` directory, where there are serveral examples of how to achieve common carousel requirements.
 
-The example projects have been created with `create-react-app` so can be simply started by navigating to the example you want and starting the app:
+To start storybook locally:
 
 ```shell
-  cd examples/horizontal
+  cd storybook
   npm install
-  npm run start
+  npm run storybook
 ```
 
 # Roadmap:
 
 - Testing!!!
 - Convert to TS
-- Keyboard controls example
-- Autoplay example
-- Infinite scroll example
-- Build dist in CI
-- Convert examples to storybook
-- Deploy storybook examples
-- Accessibility options
+- Minify css

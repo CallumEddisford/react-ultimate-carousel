@@ -1,4 +1,5 @@
 dist
+lib/styles/carousel.min.css
 node_modules
 coverage
 .DS_STORE

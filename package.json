@@ -1,22 +1,26 @@
 {
   "name": "react-ultimate-carousel",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Introducing Ultimate Carousel, a utility-first carousel for React apps that prioritizes functionality over pre-packaged features.",
   "main": "dist/index.min.js",
-  "files": ["dist/index.min.js", "lib"],
+  "files": [
+    "dist/index.min.js",
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/CallumEddisford/react-ultimate-carousel.git"
   },
   "bugs": {
-      "url": "https://github.com/CallumEddisford/react-ultimate-carousel/issues"
+    "url": "https://github.com/CallumEddisford/react-ultimate-carousel/issues"
   },
   "homepage": "https://callumeddisford.github.io/react-ultimate-carousel",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "watch 'npm run build' src",
-    "build": "NODE_ENV=production ./node_modules/.bin/babel src --out-file dist/index.js && npm run minify",
-    "minify": "./node_modules/.bin/minify dist/index.js --out-file dist/index.min.js  --mangle.keepClassName"
+    "build": "NODE_ENV=production ./node_modules/.bin/babel src --out-file dist/index.js && npm run minify-build && npm run minify-css",
+    "minify-build": "./node_modules/.bin/minify dist/index.js --out-file dist/index.min.js  --mangle.keepClassName",
+    "minify-css": "css-minify -f lib/styles/carousel.css -o lib/styles"
   },
   "author": "Callum Eddisford",
   "license": "ISC",
@@ -30,6 +34,7 @@
     "@babel/preset-env": "^7.22.4",
     "@babel/preset-react": "^7.22.3",
     "babel-minify": "^0.5.2",
+    "css-minify": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "watch": "^1.0.2"

@@ -54,10 +54,28 @@ class ReactUltimateCarousel extends Component {
   };
 
   handleMouseUp = () => {
+    const { isDragging } = this.state;
+    if (isDragging) {
+      const carousel = this.carouselRef.current;
+      const { offsetHeight, offsetWidth } = carousel;
+      const newIndex = Math.round(
+        this.isVertical ? carousel.scrollTop / offsetHeight : carousel.scrollLeft / offsetWidth
+      );
+  
+      if (this.isVertical) {
+        carousel.children[newIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        carousel.children[newIndex].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+      }
+  
+      this.setState({ visibleIndex: newIndex });
+    }
+  
     this.setState({ isDragging: false });
-    document.removeEventListener("mousemove", this.handleMouseMove);
-    document.removeEventListener("mouseup", this.handleMouseUp);
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('mouseup', this.handleMouseUp);
   };
+  
 
   observeIntersection = (childRef, index) => {
     const observer = new IntersectionObserver((entries) => this.handleIntersection(entries, index), {
@@ -116,22 +134,35 @@ class ReactUltimateCarousel extends Component {
     if (visibleIndex !== prevState.visibleIndex && this.props.onChange) {
       this.props.onChange(visibleIndex);
     }
+
+    if (this.props.children.length > prevProps.children.length) {
+      const newSlides = this.props.children.slice(prevProps.children.length);
+      newSlides.forEach((_, index) => {
+        const newIndex = prevProps.children.length + index;
+        const childRef = this.childrenRefs[newIndex];
+        if (childRef) {
+          this.observeIntersection(childRef, newIndex);
+        }
+      });
+    }
   }
 
   render() {
-    const { children } = this.props;
+    const { children, className } = this.props;
     const { visibleIndex, isDragging } = this.state;
-
+  
     const style = {
       scrollSnapType: isDragging ? "none" : `${this.isVertical ? "y" : "x"} mandatory`,
       whiteSpace: this.isVertical ? "normal" : "nowrap",
     };
-
+  
+    const carouselClassName = className ? `carousel ${className}` : "carousel";
+  
     return (
       <>
         <div
           style={style}
-          className="carousel"
+          className={carouselClassName}
           ref={this.carouselRef}
           onMouseDown={this.handleMouseDown}
         >
