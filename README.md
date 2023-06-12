@@ -2,7 +2,6 @@
 ![workflow](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/npm-publish.yml/badge.svg)
 ![cypress](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/test.yml/badge.svg)
 
-
 # Ultimate Carousel
 
 > _"The best kind of web carousel is the one you build yourself!"_
@@ -24,7 +23,7 @@ DEMOS: [https://react-ultimate-carousel.callumeddisford.co.uk/](https://react-ul
 - Utility first
 - Single element markup, the rest is your own
 - No bloated styles, just a few required rules - complete control over how you style your carousel!
-- No JS transition tom foolery, pure native HTML elements
+- No JS translation tom foolery, pure native HTML elements
 - Light weight with a tiny package size of `~2.5kb` gzipped
 - Plenty of demos;
   - Horizontal
@@ -117,5 +116,5 @@ To start storybook locally:
   npm run storybook
 ```
 
-# Roadmap:
+# Roadmap
 - Convert to TS
