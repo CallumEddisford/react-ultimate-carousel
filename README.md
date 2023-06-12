@@ -118,6 +118,4 @@ To start storybook locally:
 ```
 
 # Roadmap:
-
-- Testing!!!
 - Convert to TS
