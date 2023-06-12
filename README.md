@@ -1,5 +1,7 @@
 [![npm version](https://badge.fury.io/js/react-ultimate-carousel.svg)](https://badge.fury.io/js/react-ultimate-carousel)
 ![workflow](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/npm-publish.yml/badge.svg)
+![cypress](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/test.yml/badge.svg)
+
 
 # Ultimate Carousel
 
