@@ -3,6 +3,7 @@
     height: 100%;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .carousel::-webkit-scrollbar { 
@@ -10,6 +11,10 @@
 }
 
 .carousel > * {
+    -ms-scroll-snap-align: start;
     scroll-snap-align: start;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }

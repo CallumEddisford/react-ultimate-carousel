@@ -24,7 +24,7 @@ DEMOS: [https://react-ultimate-carousel.callumeddisford.co.uk/](https://react-ul
 - Single element markup, the rest is your own
 - No bloated styles, just a few required rules - complete control over how you style your carousel!
 - No JS translation tom foolery, pure native HTML elements
-- Light weight with a tiny package size of `~2.5kb` gzipped
+- Light weight with a tiny package size of `~2.4kb` gzipped
 - Plenty of demos;
   - Horizontal
   - Vertical
@@ -87,12 +87,13 @@ export default App;
 
 ## ReactUltimateCarousel
 
-| Name           | Value                        | Description                                                                                                        |
-|----------------|------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| axis           | `'horizontal'`, `'vertical'` | The direction of the carousel, defaults to `'horizontal'`                                                          |
-| threshold      | `number`                     | The point at which the active slide changes, defaults to `0.5`                                                     |
-| onChange       | `function`                   | Callback to handle when the active slide changes                                                                   |
-| renderControls | `function`                   | Provides utility props to add to your own elements which can control the slider. See below for renderControls props |
+| Name           | Value                        | Description                                                                                                         |
+|----------------|------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| axis           | `'horizontal'`, `'vertical'` | The direction of the carousel, defaults to `'horizontal'`                                                           |
+| threshold      | `number`                     | The point at which the active slide changes, defaults to `0.5`                                                      |
+| isDraggable    | `boolean`                    | Sets whether the carousel can be clicked and dragged with a mouse, defaults to `true`                               |
+| onChange       | `function`                   | Callback to handle when the active slide changes, provides the slide index when triggered                           |
+| renderControls | `function`                   | Provides utility props to add to your own elements which can control the slider, see below for renderControls props |
 
 ## renderControls
 
@@ -111,10 +112,24 @@ Please check out the `storybook/src/examples` directory, where there are servera
 To start storybook locally:
 
 ```shell
+  npm install
+  npm run build:js
   cd storybook
   npm install
   npm run storybook
 ```
 
-# Roadmap
-- Convert to TS
+# Local development
+You can use the npm watch command `npm run watch` to watch for file changes on `src/index.js` and then re-build it, you can then start storybook locally to start developing `react-ultimate-carousel`.
+
+```shell
+  npm install
+  npm run watch
+
+  # New cli tab/window
+  cd storybook
+  npm install
+  npm run storybook
+```
+
+The storybook app has `react-ultimate-carousel` installed via symlink, so once the watch command triggers a re-build, the storybook app wil hot reload.
