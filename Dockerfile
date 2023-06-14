@@ -2,14 +2,14 @@
 FROM node:18-alpine as storybook-build
 WORKDIR /app
 COPY . ./
-RUN npm ci && npm run build:js
-RUN cd storybook && npm ci && npm run build:storybook
+RUN npm ci
+RUN npm run build:storybook
 
 # server environment
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/configfile.template
 
-COPY --from=storybook-build /app/storybook/storybook-static /usr/share/nginx/html
+COPY --from=storybook-build /app/storybook-static /usr/share/nginx/html
 
 ENV PORT 8080
 ENV HOST 0.0.0.0

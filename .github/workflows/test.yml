@@ -11,7 +11,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: npm ci
-      - run: npm run build:js
+      - run: npm run lint
+      - run: npm run build
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:

@@ -12,17 +12,15 @@ class ReactUltimateCarousel extends Component {
     this.childrenRefs = [];
     this.observers = [];
     this.isVertical = this.props.axis === "vertical";
+    this.draggable = this.props.isDraggable === undefined ? true : this.props.isDraggable;
   }
 
   handleIntersection = (entries, index) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        this.setState({ visibleIndex: index });
-      }
-    });
+    entries.forEach((entry) => entry.isIntersecting && this.setState({ visibleIndex: index }));
   };
 
   handleMouseDown = (e) => {
+    if (!this.draggable) return;
     const { clientY, clientX } = e;
     const { scrollTop, scrollLeft } = this.carouselRef.current;
     this.setState({
@@ -31,7 +29,7 @@ class ReactUltimateCarousel extends Component {
         clientY,
         clientX,
         scrollTop,
-        scrollLeft,
+        scrollLeft
       },
     });
     document.addEventListener("mousemove", this.handleMouseMove);
@@ -45,11 +43,8 @@ class ReactUltimateCarousel extends Component {
       const deltaY = clientY - startY;
       const deltaX = clientX - startX;
 
-      if (this.isVertical) {
-        this.carouselRef.current.scrollTop = scrollTop - deltaY;
-      } else {
-        this.carouselRef.current.scrollLeft = scrollLeft - deltaX;
-      }
+      if (this.isVertical) this.carouselRef.current.scrollTop = scrollTop - deltaY;
+      else this.carouselRef.current.scrollLeft = scrollLeft - deltaX;
     }
   };
 
@@ -58,30 +53,22 @@ class ReactUltimateCarousel extends Component {
     if (isDragging) {
       const carousel = this.carouselRef.current;
       const { offsetHeight, offsetWidth } = carousel;
-      const newIndex = Math.round(
-        this.isVertical ? carousel.scrollTop / offsetHeight : carousel.scrollLeft / offsetWidth
-      );
-  
-      if (this.isVertical) {
-        carousel.children[newIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      } else {
-        carousel.children[newIndex].scrollIntoView({ behavior: 'smooth', inline: 'start' });
-      }
-  
+      const newIndex = Math.round(this.isVertical ? carousel.scrollTop / offsetHeight : carousel.scrollLeft / offsetWidth);
+
+      if (this.isVertical) carousel.children[newIndex].scrollIntoView({ behavior: "smooth", block: 'nearest' });
+      else carousel.children[newIndex].scrollIntoView({ behavior: "smooth", inline: 'start' });
+
       this.setState({ visibleIndex: newIndex });
     }
-  
+
     this.setState({ isDragging: false });
     document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseup', this.handleMouseUp);
   };
-  
 
   observeIntersection = (childRef, index) => {
     const observer = new IntersectionObserver((entries) => this.handleIntersection(entries, index), {
-      root: null,
-      rootMargin: "0px",
-      threshold: this.props.threshold || 0.5,
+      threshold: this.props.threshold || 0.5
     });
     observer.observe(childRef);
     this.observers.push(observer);
@@ -91,22 +78,18 @@ class ReactUltimateCarousel extends Component {
     const { visibleIndex } = this.state;
     const numSlides = React.Children.count(this.props.children);
     const startingIndex = this.props.startingIndex || 0;
+    const isIndex = typeof directionOrIndex === "number";
     let newIndex;
 
-    if (typeof directionOrIndex === "number") {
-      newIndex = (directionOrIndex - startingIndex + numSlides) % numSlides;
-    } else if (directionOrIndex === "next") {
-      newIndex = (visibleIndex + 1) % numSlides;
-    } else if (directionOrIndex === "previous") {
-      newIndex = (visibleIndex - 1 + numSlides) % numSlides;
-    }
+    if (isIndex) newIndex = (directionOrIndex - startingIndex + numSlides) % numSlides;
+    else if (directionOrIndex === "next") newIndex = (visibleIndex + 1) % numSlides;
+    else if (directionOrIndex === "previous") newIndex = (visibleIndex - 1 + numSlides) % numSlides;
 
     newIndex = (newIndex + startingIndex) % numSlides;
 
     this.carouselRef.current.scrollTo({
-      top: 0,
       left: newIndex * this.carouselRef.current.offsetWidth,
-      behavior: typeof directionOrIndex === "number" ? "instant" : "smooth",
+      behavior: isIndex ? "instant" : "smooth"
     });
 
     this.setState({ visibleIndex: newIndex });
@@ -117,9 +100,7 @@ class ReactUltimateCarousel extends Component {
     const { startingIndex } = this.props;
     if (startingIndex && startingIndex >= 0 && startingIndex < this.childrenRefs.length) {
       this.carouselRef.current.scrollTo({
-        top: 0,
-        left: startingIndex * this.carouselRef.current.offsetWidth,
-        behavior: "auto",
+        left: startingIndex * this.carouselRef.current.offsetWidth
       });
       this.setState({ visibleIndex: startingIndex });
     }
@@ -131,18 +112,14 @@ class ReactUltimateCarousel extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { visibleIndex } = this.state;
-    if (visibleIndex !== prevState.visibleIndex && this.props.onChange) {
-      this.props.onChange(visibleIndex);
-    }
+    if (visibleIndex !== prevState.visibleIndex && this.props.onChange) this.props.onChange(visibleIndex);
 
     if (this.props.children.length > prevProps.children.length) {
       const newSlides = this.props.children.slice(prevProps.children.length);
       newSlides.forEach((_, index) => {
         const newIndex = prevProps.children.length + index;
         const childRef = this.childrenRefs[newIndex];
-        if (childRef) {
-          this.observeIntersection(childRef, newIndex);
-        }
+        if (childRef) this.observeIntersection(childRef, newIndex);
       });
     }
   }
@@ -150,19 +127,17 @@ class ReactUltimateCarousel extends Component {
   render() {
     const { children, className } = this.props;
     const { visibleIndex, isDragging } = this.state;
-  
+
     const style = {
       scrollSnapType: isDragging ? "none" : `${this.isVertical ? "y" : "x"} mandatory`,
       whiteSpace: this.isVertical ? "normal" : "nowrap",
     };
-  
-    const carouselClassName = className ? `carousel ${className}` : "carousel";
-  
+
     return (
       <>
         <div
           style={style}
-          className={carouselClassName}
+          className={className ? `carousel ${className}` : "carousel"}
           ref={this.carouselRef}
           onMouseDown={this.handleMouseDown}
         >
@@ -171,13 +146,14 @@ class ReactUltimateCarousel extends Component {
               key: index,
               isActive: index === visibleIndex,
               innerRef: (ref) => (this.childrenRefs[index] = ref),
+              navigateSlide: this.navigateSlide
             })
           )}
         </div>
         {this.props.renderControls &&
           this.props.renderControls({
             navigateSlide: this.navigateSlide,
-            visibleIndex: this.state.visibleIndex,
+            visibleIndex: this.state.visibleIndex
           })}
       </>
     );
