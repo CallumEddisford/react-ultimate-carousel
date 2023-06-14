@@ -1,3 +1,7 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
 [![npm version](https://badge.fury.io/js/react-ultimate-carousel.svg)](https://badge.fury.io/js/react-ultimate-carousel)
 ![workflow](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/npm-publish.yml/badge.svg)
 ![cypress](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/test.yml/badge.svg)
@@ -90,30 +94,89 @@ export default App;
 
 ## ReactUltimateCarousel
 
-| Name           | Value                        | Description                                                                                                         |
-|----------------|------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| axis           | `'horizontal'`, `'vertical'` | The direction of the carousel, defaults to `'horizontal'`                                                           |
-| threshold      | `number`                     | The point at which the active slide changes, defaults to `0.5`                                                      |
-| isDraggable    | `boolean`                    | Sets whether the carousel can be clicked and dragged with a mouse, defaults to `true`                               |
-| onChange       | `function`                   | Callback to handle when the active slide changes, provides the slide index when triggered                           |
-| renderControls | `function`                   | Provides utility props to add to your own elements which can control the slider, see below for renderControls props |
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>axis</td>
+        <td>`"horizontal"`, `"vertical:`</td>
+        <td>The direction of the carousel, defaults to `"horizontal"`</td>
+    </tr>
+    <tr>
+        <td>threshold</td>
+        <td>`number`</td>
+        <td>The point at which the active slide changes, defaults to `0.5`</td>
+    </tr>
+    <tr>
+        <td>isDraggable</td>
+        <td>`boolean`</td>
+        <td>Sets whether the carousel can be clicked and dragged with a mouse, defaults to `true`</td>
+    </tr>
+    <tr>
+        <td>onChange</td>
+        <td>`function`</td>
+        <td>Callback to handle when the active slide changes, provides the slide index when triggered</td>
+    </tr>
+    <tr>
+        <td>renderControls</td>
+        <td>`function`</td>
+        <td>Provides utility props to add to your own elements which can control the slider, see below for renderControls props</td>
+    </tr>
+</table>
 
 ## Render Controls
 
-| Name          | Value      | Description                                                                        |
-|---------------|------------|------------------------------------------------------------------------------------|
-| navigateSlide | `function` | A function to navigate to a slide, accepts `"next"`, `"previous"` or a slide index |
-| visibleIndex  | `number`   | Declares whether the current slide is active                                       |
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>navigateSlide</td>
+        <td>`function`</td>
+        <td>A function to navigate to a slide, accepts `"next"`, `"previous"` or a slide index</td>
+    </tr>
+    <tr>
+        <td>visibleIndex</td>
+        <td>`number`</td>
+        <td>Declares whether the current slide is active</td>
+    </tr>
+</table>
 
 ## Slides
 Each slide will receive the following props:
 
-| Name          | Value      | Description                                                                        |
-|---------------|------------|------------------------------------------------------------------------------------|
-| key           | `number`   | Provides the current slide index                                                   |
-| isActive      | `boolean`  | Declares whether the current slide is active                                       |
-| innerRef      | `function` | The ref that needs to be assigned to your slide element                            |
-| navigateSlide | `function` | A function to navigate to a slide, accepts `"next"`, `"previous"` or a slide index |
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>key</td>
+        <td>`number`</td>
+        <td>Provides the current slide index</td>
+    </tr>
+    <tr>
+        <td>isActive</td>
+        <td>`boolean`</td>
+        <td>Declares whether the current slide is active</td>
+    </tr>
+    <tr>
+        <td>innerRef</td>
+        <td>`function`</td>
+        <td>The ref that needs to be assigned to your slide element</td>
+    </tr>
+    <tr>
+        <td>navigateSlide</td>
+        <td>`function`</td>
+        <td>A function to navigate to a slide, accepts `"next"`, `"previous"` or a slide index</td>
+    </tr>
+</table>
 
 # Examples
 Please check out the `src/examples` directory, where there are serveral examples of how to achieve common carousel requirements.
@@ -122,6 +185,6 @@ Please check out the `src/examples` directory, where there are serveral examples
 To start storybook locally:
 
 ```shell
-  npm install
-  npm run storybook
+npm install
+npm run storybook
 ```
