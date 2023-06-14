@@ -1,6 +1,6 @@
 import ReactUltimateCarousel from 'react-ultimate-carousel';
 import "./App.css";
-import "./index.css";
+import "../../index.css";
 import "react-ultimate-carousel/lib/styles/carousel.css";
 import Slide from './Slide';
 

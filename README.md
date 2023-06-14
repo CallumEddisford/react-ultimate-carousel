@@ -2,17 +2,17 @@
 ![workflow](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/npm-publish.yml/badge.svg)
 ![cypress](https://github.com/CallumEddisford/react-ultimate-carousel/actions/workflows/test.yml/badge.svg)
 
-# Ultimate Carousel
+# React Ultimate Carousel
 
 > _"The best kind of web carousel is the one you build yourself!"_
 
-Introducing Ultimate Carousel, a utility-first carousel for React apps that prioritizes functionality over pre-packaged features.
+Introducing React Ultimate Carousel, a utility-first carousel for React apps that prioritizes functionality over pre-packaged features.
 
-Ultimate Carousel empowers you to build your carousel exactly the way you envision it. Instead of overwhelming you with a multitude of features that you may not even use, this package focuses on providing the essential functionality to your own components so that you can craft anything.
+React Ultimate Carousel empowers you to build your carousel exactly the way you envision it. Instead of overwhelming you with a multitude of features that you may not even use, this package focuses on providing the essential functionality to your own components so that you can craft anything.
 
 While other carousel packages may be convenient for quick implementation, they often include a plethora of features that end up bloating your builds unnecessarily.
 
-Ultimate Carousel gives you the tools to create all the features you want and need.
+React Ultimate Carousel gives you the tools to create all the features you want and need.
 
 Relies on CSS Scroll Snap: [https://caniuse.com/css-snappoints](https://caniuse.com/css-snappoints)
 
@@ -20,11 +20,14 @@ DEMOS: [https://react-ultimate-carousel.callumeddisford.co.uk/](https://react-ul
 
 # Features
 
-- Utility first
+- Utility first, provides the base functionality you need
 - Single element markup, the rest is your own
 - No bloated styles, just a few required rules - complete control over how you style your carousel!
 - No JS translation tom foolery, pure native HTML elements
 - Light weight with a tiny package size of `~2.4kb` gzipped
+- Horizontal and vertical axis support
+- Swipe to slide
+- Drag to slide
 - Plenty of demos;
   - Horizontal
   - Vertical
@@ -95,15 +98,22 @@ export default App;
 | onChange       | `function`                   | Callback to handle when the active slide changes, provides the slide index when triggered                           |
 | renderControls | `function`                   | Provides utility props to add to your own elements which can control the slider, see below for renderControls props |
 
-## renderControls
+## Render Controls
 
-| Name     | Value      | Description                                             |
-|----------|------------|---------------------------------------------------------|
-| key      | `number`   | Provides the current slide index                        |
-| isActive | `boolean`  | Declares whether the current slide is active            |
-| innerRef | `function` | The ref that needs to be assigned to your slide element |
+| Name          | Value      | Description                                                                        |
+|---------------|------------|------------------------------------------------------------------------------------|
+| navigateSlide | `function` | A function to navigate to a slide, accepts `"next"`, `"previous"` or a slide index |
+| visibleIndex  | `number`   | Declares whether the current slide is active                                       |
 
-You can also use your own props alongside these props
+## Slides
+Each slide will receive the following props:
+
+| Name          | Value      | Description                                                                        |
+|---------------|------------|------------------------------------------------------------------------------------|
+| key           | `number`   | Provides the current slide index                                                   |
+| isActive      | `boolean`  | Declares whether the current slide is active                                       |
+| innerRef      | `function` | The ref that needs to be assigned to your slide element                            |
+| navigateSlide | `function` | A function to navigate to a slide, accepts `"next"`, `"previous"` or a slide index |
 
 # Examples
 

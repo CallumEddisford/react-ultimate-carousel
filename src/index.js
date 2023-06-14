@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "intersection-observer";
 
-const BEHAVIOUR_SMOOTH = "smooth";
-
 class ReactUltimateCarousel extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +29,7 @@ class ReactUltimateCarousel extends Component {
         clientY,
         clientX,
         scrollTop,
-        scrollLeft,
+        scrollLeft
       },
     });
     document.addEventListener("mousemove", this.handleMouseMove);
@@ -57,8 +55,8 @@ class ReactUltimateCarousel extends Component {
       const { offsetHeight, offsetWidth } = carousel;
       const newIndex = Math.round(this.isVertical ? carousel.scrollTop / offsetHeight : carousel.scrollLeft / offsetWidth);
 
-      if (this.isVertical) carousel.children[newIndex].scrollIntoView({ behavior: BEHAVIOUR_SMOOTH, block: 'nearest' });
-      else carousel.children[newIndex].scrollIntoView({ behavior: BEHAVIOUR_SMOOTH, inline: 'start' });
+      if (this.isVertical) carousel.children[newIndex].scrollIntoView({ behavior: "smooth", block: 'nearest' });
+      else carousel.children[newIndex].scrollIntoView({ behavior: "smooth", inline: 'start' });
 
       this.setState({ visibleIndex: newIndex });
     }
@@ -70,7 +68,7 @@ class ReactUltimateCarousel extends Component {
 
   observeIntersection = (childRef, index) => {
     const observer = new IntersectionObserver((entries) => this.handleIntersection(entries, index), {
-      threshold: this.props.threshold || 0.5,
+      threshold: this.props.threshold || 0.5
     });
     observer.observe(childRef);
     this.observers.push(observer);
@@ -91,7 +89,7 @@ class ReactUltimateCarousel extends Component {
 
     this.carouselRef.current.scrollTo({
       left: newIndex * this.carouselRef.current.offsetWidth,
-      behavior: isIndex ? "instant" : BEHAVIOUR_SMOOTH,
+      behavior: isIndex ? "instant" : "smooth"
     });
 
     this.setState({ visibleIndex: newIndex });
@@ -148,13 +146,14 @@ class ReactUltimateCarousel extends Component {
               key: index,
               isActive: index === visibleIndex,
               innerRef: (ref) => (this.childrenRefs[index] = ref),
+              navigateSlide: this.navigateSlide
             })
           )}
         </div>
         {this.props.renderControls &&
           this.props.renderControls({
             navigateSlide: this.navigateSlide,
-            visibleIndex: this.state.visibleIndex,
+            visibleIndex: this.state.visibleIndex
           })}
       </>
     );
