@@ -13,6 +13,7 @@ function Vertical() {
       <ReactUltimateCarousel
         startingIndex={4}
         threshold={0.5}
+        axis="vertical"
       >
         {slides.map((_, index) => <Slide key={`slide-${index}`} index={index} />)}
       </ReactUltimateCarousel>
