@@ -1,6 +1,6 @@
 {
   "name": "react-ultimate-carousel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Introducing React Ultimate Carousel, a utility-first carousel for React apps that prioritizes functionality over pre-packaged features.",
   "main": "dist/index.min.js",
   "files": [
@@ -40,8 +40,8 @@
   "author": "Callum Eddisford",
   "license": "ISC",
   "peerDependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react": "15 - 18",
+    "react-dom": "15 - 18"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.5",
