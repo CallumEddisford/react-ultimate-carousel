@@ -40,10 +40,70 @@ describe("<ReactUltimateCarousel />", () => {
     cy.get(".slide").should("have.length", 5);
   });
 
+  it("vertical carousel can navigate correctly", () => {
+    cy.mount(
+      <div className="carousel--container vertical">
+        <ReactUltimateCarousel
+          startingIndex={0}
+          threshold={0.5}
+          axis="vertical"
+          renderControls={({ navigateSlide }) => (
+            <div className="controls">
+              <button
+                id="previous"
+                onClick={() => navigateSlide("previous")}
+              >
+                Previous
+              </button>
+              <button
+                id="slideFour"
+                onClick={() => navigateSlide(4)}
+              >
+                Slide 4
+              </button>
+              <button
+                id="next"
+                onClick={() => navigateSlide("next")}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        >
+          {slides.map((_, index) => (
+            <Slide key={`slide-${index}`} index={index} />
+          ))}
+        </ReactUltimateCarousel>
+      </div>
+    );
+
+    cy.get(".slide").contains("Slide 0 is active");
+    cy.get("#next").click();
+    cy.get(".slide").contains("Slide 1 is active");
+    cy.get("#slideFour").click();
+    cy.get(".slide").contains("Slide 4 is active");
+    cy.get("#previous").click();
+    cy.get(".slide").contains("Slide 3 is active");
+  });
+
   it("renders correctly at initial slide", () => {
     cy.mount(
       <div className="carousel--container">
-        <ReactUltimateCarousel startingIndex="4">
+        <ReactUltimateCarousel startingIndex={4}>
+          {slides.map((_, index) => (
+            <Slide key={`slide-${index}`} index={index} />
+          ))}
+        </ReactUltimateCarousel>
+      </div>
+    );
+
+    cy.get(".slide").contains("Slide 4 is active");
+  });
+
+  it("renders correctly at initial slide vertically", () => {
+    cy.mount(
+      <div className="carousel--container vertical">
+        <ReactUltimateCarousel startingIndex={4}>
           {slides.map((_, index) => (
             <Slide key={`slide-${index}`} index={index} />
           ))}

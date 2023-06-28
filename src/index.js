@@ -55,8 +55,8 @@ class ReactUltimateCarousel extends Component {
       const { offsetHeight, offsetWidth } = carousel;
       const newIndex = Math.round(this.isVertical ? carousel.scrollTop / offsetHeight : carousel.scrollLeft / offsetWidth);
 
-      if (this.isVertical) carousel.children[newIndex].scrollIntoView({ behavior: "smooth", block: 'nearest' });
-      else carousel.children[newIndex].scrollIntoView({ behavior: "smooth", inline: 'start' });
+      if (this.isVertical) carousel.children[newIndex].scrollIntoView({ behavior: "smooth", block: "nearest" });
+      else carousel.children[newIndex].scrollIntoView({ behavior: "smooth", inline: "start" });
 
       this.setState({ visibleIndex: newIndex });
     }
@@ -77,31 +77,61 @@ class ReactUltimateCarousel extends Component {
   navigateSlide = (directionOrIndex) => {
     const { visibleIndex } = this.state;
     const numSlides = React.Children.count(this.props.children);
-    const startingIndex = this.props.startingIndex || 0;
     const isIndex = typeof directionOrIndex === "number";
+  
     let newIndex;
-
-    if (isIndex) newIndex = (directionOrIndex - startingIndex + numSlides) % numSlides;
-    else if (directionOrIndex === "next") newIndex = (visibleIndex + 1) % numSlides;
-    else if (directionOrIndex === "previous") newIndex = (visibleIndex - 1 + numSlides) % numSlides;
-
-    newIndex = (newIndex + startingIndex) % numSlides;
-
-    this.carouselRef.current.scrollTo({
-      left: newIndex * this.carouselRef.current.offsetWidth,
-      behavior: isIndex ? "instant" : "smooth"
-    });
-
+    if (isIndex) {
+      newIndex = directionOrIndex % numSlides;
+      if (newIndex < 0) {
+        newIndex = (newIndex + numSlides) % numSlides;
+      }
+    } else if (directionOrIndex === "next") {
+      newIndex = (visibleIndex + 1) % numSlides;
+    } else if (directionOrIndex === "previous") {
+      newIndex = (visibleIndex - 1 + numSlides) % numSlides;
+    }
+  
+    const { current: carousel } = this.carouselRef;
+  
+    if (this.isVertical) {
+      const { offsetHeight } = carousel;
+      const { top: carouselTop } = carousel.getBoundingClientRect();
+      const { top: slideTop } = this.childrenRefs[newIndex].getBoundingClientRect();
+      const { height: slideHeight } = this.childrenRefs[newIndex].getBoundingClientRect();
+      const scrollTop = carousel.scrollTop + slideTop - carouselTop - offsetHeight / 2 + slideHeight / 2;
+      carousel.scrollTo({
+        top: scrollTop,
+        behavior: isIndex ? "instant" : "smooth",
+      });
+    } else {
+      const offsetWidth = carousel.offsetWidth;
+      carousel.scrollTo({
+        left: newIndex * offsetWidth,
+        behavior: isIndex ? "instant" : "smooth",
+      });
+    }
+  
     this.setState({ visibleIndex: newIndex });
   };
-
+  
   componentDidMount() {
     this.childrenRefs.forEach(this.observeIntersection);
     const { startingIndex } = this.props;
     if (startingIndex && startingIndex >= 0 && startingIndex < this.childrenRefs.length) {
-      this.carouselRef.current.scrollTo({
-        left: startingIndex * this.carouselRef.current.offsetWidth
-      });
+      if (this.isVertical) {
+        const { offsetHeight } = this.carouselRef.current;
+        const { top: carouselTop } = this.carouselRef.current.getBoundingClientRect();
+        const { top: slideTop } = this.childrenRefs[startingIndex].getBoundingClientRect();
+        const { height: slideHeight } = this.childrenRefs[startingIndex].getBoundingClientRect();
+        const scrollTop = this.carouselRef.current.scrollTop + slideTop - carouselTop - offsetHeight / 2 + slideHeight / 2;
+        this.carouselRef.current.scrollTo({
+          top: scrollTop,
+        });
+      } else {
+        this.carouselRef.current.scrollTo({
+          left: startingIndex * this.carouselRef.current.offsetWidth,
+        });
+      }
       this.setState({ visibleIndex: startingIndex });
     }
   }
