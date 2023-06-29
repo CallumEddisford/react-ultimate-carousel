@@ -114,6 +114,34 @@ describe("<ReactUltimateCarousel />", () => {
     cy.get(".slide").contains("Slide 4 is active");
   });
 
+  it("isActive is true on correct slide when slides are not full height", () => {
+    cy.viewport(500, 600);
+    cy.mount(
+      <div className="carousel--container vertical slide-ninety">
+        <ReactUltimateCarousel
+          axis="vertical"
+          renderControls={({ navigateSlide }) => (
+            <div className="controls">
+              <button id="next" onClick={() => navigateSlide("next")}>Next</button>
+            </div>
+          )}  
+        >
+          {slides.map((_, index) => (
+            <Slide key={`slide-${index}`} index={index} />
+          ))}
+        </ReactUltimateCarousel>
+      </div>
+    );
+
+    cy.get(".slide").contains("Slide 0 is active");
+    cy.get("#next").click();
+    cy.get(".slide").contains("Slide 1 is active");
+    cy.get("#next").click();
+    cy.get(".slide").contains("Slide 2 is active");
+    cy.get("#next").click();
+    cy.get(".slide").contains("Slide 3 is active");
+  });
+
   it("onChange gets called when slide changes", () => {
     const results = [];
     cy.mount(
