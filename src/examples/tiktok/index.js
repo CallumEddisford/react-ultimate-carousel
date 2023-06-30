@@ -140,7 +140,7 @@ const videos = [
 function App() {
   return (
     <div className="carousel--tiktok">
-      <ReactUltimateCarousel threshold={0.9} axis="vertical">
+      <ReactUltimateCarousel threshold={0.5} axis="vertical">
         {videos.map((video, index) => (
           <Slide key={`slide-${index}`} index={index} video={video} />
         ))}

@@ -20,6 +20,10 @@
     font-size: 2rem;
   }
 
+  .carousel--container.vertical.slide-ninety > .carousel > .slide {
+    height: 90%;
+  }
+
   .carousel--container .controls {
     text-align: center;
     margin-top: 1rem;

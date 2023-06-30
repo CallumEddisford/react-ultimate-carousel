@@ -16,7 +16,12 @@ class ReactUltimateCarousel extends Component {
   }
 
   handleIntersection = (entries, index) => {
-    entries.forEach((entry) => entry.isIntersecting && this.setState({ visibleIndex: index }));
+    entries.forEach((entry) => {
+      const { isIntersecting, intersectionRatio } = entry;
+      const visibilityThreshold = 0.6;
+      const isVisible = isIntersecting || intersectionRatio > visibilityThreshold;
+      if (isVisible) this.setState({ visibleIndex: index });
+    });
   };
 
   handleMouseDown = (e) => {
@@ -78,7 +83,7 @@ class ReactUltimateCarousel extends Component {
     const { visibleIndex } = this.state;
     const numSlides = React.Children.count(this.props.children);
     const isIndex = typeof directionOrIndex === "number";
-  
+
     let newIndex;
     if (isIndex) {
       newIndex = directionOrIndex % numSlides;
@@ -90,9 +95,9 @@ class ReactUltimateCarousel extends Component {
     } else if (directionOrIndex === "previous") {
       newIndex = (visibleIndex - 1 + numSlides) % numSlides;
     }
-  
+
     const { current: carousel } = this.carouselRef;
-  
+
     if (this.isVertical) {
       const { offsetHeight } = carousel;
       const { top: carouselTop } = carousel.getBoundingClientRect();
@@ -110,10 +115,10 @@ class ReactUltimateCarousel extends Component {
         behavior: isIndex ? "instant" : "smooth",
       });
     }
-  
+
     this.setState({ visibleIndex: newIndex });
   };
-  
+
   componentDidMount() {
     this.childrenRefs.forEach(this.observeIntersection);
     const { startingIndex } = this.props;
@@ -126,10 +131,12 @@ class ReactUltimateCarousel extends Component {
         const scrollTop = this.carouselRef.current.scrollTop + slideTop - carouselTop - offsetHeight / 2 + slideHeight / 2;
         this.carouselRef.current.scrollTo({
           top: scrollTop,
+          behavior: "instant",
         });
       } else {
         this.carouselRef.current.scrollTo({
           left: startingIndex * this.carouselRef.current.offsetWidth,
+          behavior: "instant",
         });
       }
       this.setState({ visibleIndex: startingIndex });
