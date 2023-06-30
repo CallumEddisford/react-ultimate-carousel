@@ -15,15 +15,16 @@ class ReactUltimateCarousel extends Component {
     this.draggable = this.props.isDraggable === undefined ? true : this.props.isDraggable;
   }
 
-  handleIntersection = (entries, index) => {
+  handleIntersection = (entries) => {
     entries.forEach((entry) => {
-      const { isIntersecting, intersectionRatio } = entry;
-      const visibilityThreshold = 0.6;
-      const isVisible = isIntersecting || intersectionRatio > visibilityThreshold;
-      if (isVisible) this.setState({ visibleIndex: index });
+      if (entry.isIntersecting) {
+        const children = Array.from(this.carouselRef.current.children);
+        const visibleIndex = children.indexOf(entry.target);
+        this.setState({ visibleIndex });
+      }
     });
   };
-
+  
   handleMouseDown = (e) => {
     if (!this.draggable) return;
     const { clientY, clientX } = e;
@@ -57,12 +58,11 @@ class ReactUltimateCarousel extends Component {
     const { isDragging } = this.state;
     if (isDragging) {
       const carousel = this.carouselRef.current;
-      const { offsetHeight, offsetWidth } = carousel;
+      const { offsetHeight, offsetWidth } = carousel.children[this.state.visibleIndex];
       const newIndex = Math.round(this.isVertical ? carousel.scrollTop / offsetHeight : carousel.scrollLeft / offsetWidth);
 
-      if (this.isVertical) carousel.children[newIndex].scrollIntoView({ behavior: "smooth", block: "nearest" });
+      if (this.isVertical) carousel.children[newIndex].scrollIntoView({ behavior: "smooth", block: "start" });
       else carousel.children[newIndex].scrollIntoView({ behavior: "smooth", inline: "start" });
-
       this.setState({ visibleIndex: newIndex });
     }
 
@@ -71,8 +71,8 @@ class ReactUltimateCarousel extends Component {
     document.removeEventListener('mouseup', this.handleMouseUp);
   };
 
-  observeIntersection = (childRef, index) => {
-    const observer = new IntersectionObserver((entries) => this.handleIntersection(entries, index), {
+  observeIntersection = (childRef) => {
+    const observer = new IntersectionObserver((entries) => this.handleIntersection(entries), {
       threshold: this.props.threshold || 0.5
     });
     observer.observe(childRef);
