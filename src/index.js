@@ -71,8 +71,8 @@ class ReactUltimateCarousel extends Component {
     document.removeEventListener('mouseup', this.handleMouseUp);
   };
 
-  observeIntersection = (childRef, index) => {
-    const observer = new IntersectionObserver((entries) => this.handleIntersection(entries, index), {
+  observeIntersection = (childRef) => {
+    const observer = new IntersectionObserver((entries) => this.handleIntersection(entries), {
       threshold: this.props.threshold || 0.5
     });
     observer.observe(childRef);
