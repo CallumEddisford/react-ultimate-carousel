@@ -164,3 +164,8 @@ To start storybook locally:
   npm install
   npm run storybook
 ```
+
+## Releases
+
+To release new package versions, simply update the version number in the `package.json` file following the [SemVer](https://semver.org/) specification, then run an `npm install` to apply the the new version to the lock file.
+Once these changes are merged into the `main` branch, publish a new release through the GitHub Releases UI and use the same tag version as previously set in the `package.json` file, and the package will be released on NPM through GitHub Actions.

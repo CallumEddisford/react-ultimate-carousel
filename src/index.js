@@ -156,7 +156,7 @@ class ReactUltimateCarousel extends Component {
       newSlides.forEach((_, index) => {
         const newIndex = prevProps.children.length + index;
         const childRef = this.childrenRefs[newIndex];
-        if (childRef) this.observeIntersection(childRef, newIndex);
+        if (childRef) this.observeIntersection(childRef);
       });
     }
   }
